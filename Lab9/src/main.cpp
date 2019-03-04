@@ -26,17 +26,23 @@ by the user. The stack container is used to print a palindrome string.
 #define DEFAULT_REMOVE_PERCENT	25
 
 
+void setSimParamters(int&, int&, int&, Menu&);			//helper function for main (description below)
+
 
 int main() {
 
-	srand(time(0));
+	srand(time(0));	//seed
 
-	std::list<int> userQueue;		//create queue with list as underlying container
+
+	std::list<int> userQueue;							//create queue with list as underlying container
 	std::stack<char, std::list<char> > userStack;		//create stack with list as underlying container
 
+
+	//set base values for sim parameters, incase user decides to not enter them
 	int rounds = DEFAULT_ROUNDS;
 	int generatePercent = DEFAULT_GEN_PERCENT;
 	int removalPercent = DEFAULT_REMOVE_PERCENT;
+
 
 	Menu queueMenu;		//create menu for queue section
 	queueMenu.addPrompt("Enter number of rounds for simulation.");
@@ -44,38 +50,17 @@ int main() {
 	queueMenu.addPrompt("Enter percent chance to remove number from the queue");
 	queueMenu.addPrompt("Continue");
 
+
 	Menu stackMenu;		//create menu for stack section
 
 
 	//handle logic for queueMenu
-	int userChoice;
-
-
-	while ((userChoice = queueMenu.getUserChoice()) != queueMenu.getExitCode()){  //while the user hasnt selected '4' (exit code)
-		switch (userChoice) {
-			
-		case 1:	//set number of rounds for sim
-			rounds = validateInputGreaterThan(1, "Enter number of rounds for simulation:");
-			break;
-
-		case 2:	//set percent chance to generate to queue
-			generatePercent = validateInputRange(1, 100, "Enter percent chance to add a number to the queue.");
-			break;
-
-		case 3:	//set percent chance to remove from queue
-			removalPercent = validateInputRange(1, 100, "Enter percent chance to remove number from the queue.");
-			break;
-
-		default:
-			break;
-		}
-
-	}
-
+	setSimParamters(rounds, generatePercent, removalPercent, queueMenu);
 
 	float averageLength = 0;
 	float previousAverage = 0;
 
+	//simulation loop:
 	for (int i = 1; i <= rounds; i++) {	//run simulation for number of rounds
 
 		int numToAdd = generateRandomInt(1, 1000);		//generate number to add
@@ -101,7 +86,7 @@ int main() {
 		for (auto it = userQueue.begin(); it != userQueue.end(); it++) { //create iterator to loop through queue
 			std::cout << *it << " ";	//print value
 		}
-		std::cout << std::endl;
+		std::cout << "\n" << std::endl;
 
 
 
@@ -109,7 +94,7 @@ int main() {
 		averageLength = ( (previousAverage * ((float)i - (float)1) + (float)userQueue.size()) ) / (float)i;	//calc average length
 		
 
-		std::cout << "Average Length:" << std::endl;
+		std::cout << "Average Length: ";
 		std::cout << averageLength << std::endl;
 
 		previousAverage = averageLength;
@@ -119,7 +104,7 @@ int main() {
 	}
 
 
-
+	
 	std::string userInput;							//create string to store user input
 	std::string palindromeString = "";				//create string buffer to store original string + palindrome
 
@@ -141,7 +126,7 @@ int main() {
 		userStack.pop();
 	}
 
-
+	std::cout << std::endl;
 	std::cout << "Palidrome:" << std::endl;			//print palindrome string
 	std::cout << palindromeString << std::endl;
 
@@ -150,4 +135,48 @@ int main() {
 
 
 	return 0;
+}
+
+
+
+/*
+Simple helper function to clean main code.
+
+Handles setting sim variables entered by the user
+Param:
+	rounds - sim rounds
+	generatePercent - chance to generate number
+	removalPercent - chance to remove number
+	queueMenu - menu to be ran in function
+
+Return:
+
+*/
+void setSimParamters(int& rounds, int& generatePercent, int& removalPercent, Menu& queueMenu) {
+
+	int userChoice;
+
+	while ((userChoice = queueMenu.getUserChoice()) != queueMenu.getExitCode()) {  //while the user hasnt selected '4' (exit code)
+		switch (userChoice) {
+
+		case 1:	//set number of rounds for sim
+			rounds = validateInputGreaterThan(1, "Enter number of rounds for simulation:");
+			break;
+
+		case 2:	//set percent chance to generate to queue
+			generatePercent = validateInputRange(1, 100, "Enter percent chance to add a number to the queue.");
+			break;
+
+		case 3:	//set percent chance to remove from queue
+			removalPercent = validateInputRange(1, 100, "Enter percent chance to remove number from the queue.");
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+
+
 }
