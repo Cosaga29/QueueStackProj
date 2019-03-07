@@ -1,4 +1,4 @@
-/*******************************************
+/**************************************************************************
 Author: Martin Edmunds
 Assignment: Lab 9 
 Class: CS 162
@@ -10,7 +10,7 @@ list type for containment.
 The queue container adds and remove numbers based on a %chance decided
 by the user. The stack container is used to print a palindrome string.
 
-********************************************/
+***************************************************************************/
 
 
 #include <iostream>
